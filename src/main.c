@@ -16,6 +16,8 @@ uv_loop_t* loop;
 uv_tcp_t client;
 uv_tty_t ttyin;
 
+char* myname;
+uint8_t namelen = 0;
 
 //aka write_cb
 void on_write(uv_write_t* req, int status){
@@ -90,7 +92,8 @@ void on_connect(uv_connect_t* req, int status){
   }
   uv_read_start((uv_stream_t*)&client, alloc_buffer, on_read);
   uv_read_start((uv_stream_t*)&ttyin, alloc_buffer, on_stdin_read);
-  send_write((uv_stream_t*)&client, "HELLO", 5);
+  encode_Packet(INTRODUCE, len, client_data, client); //will need to do more once this packet is formalized
+  // send_write((uv_stream_t*)&client, "HELLO", 5);
 }
 
 int main(int argc, char* argv[]){
@@ -101,6 +104,9 @@ int main(int argc, char* argv[]){
   uv_tcp_init(loop, &client);
   struct sockaddr_in dest;
   uv_ip4_addr("0.0.0.0", 7000, &dest);
+  myname = malloc(sizeof(char)*128);
+  myname = "defaultname";
+  namelen = strlen(myname);
 
   uv_connect_t connect_req;
   uv_tcp_connect(&connect_req, (uv_tcp_t*)&client, (const struct sockaddr*)&dest, on_connect);

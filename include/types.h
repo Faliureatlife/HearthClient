@@ -83,7 +83,7 @@ enum packetType {
 
   USER_GET        = 0x30, //request for user information
   USER_UPDATE     = 0x31, //update selected user field
-  USER_INFO       = 0x32, //all of a users information
+  USER_INFO       = 0x32, //all of a users information 
   USER_LEAVE      = 0x33,
 };
 
@@ -119,7 +119,10 @@ typedef struct {
 
 
 extern inProgress* packetlist;
-extern uv_tcp_t client;
+extern uv_tty_t ttyin;
+extern char* myname;
+extern uint8_t namelen; 
+extern uv_tcp_t client; //the server
 extern void echo_write(uv_write_t* req, int status);
 
 #endif
